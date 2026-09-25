@@ -1,4 +1,12 @@
-# Fiesta — versión 1.3
+# Fiesta — versión 1.3.1
+
+## Corrección 1.3.1 — escucha HTTP en Render
+
+El backend usa `PORT` del entorno (4000 si no está definido). Cuando `RENDER=true`, escucha en `0.0.0.0` aunque haya un HOST local previo. Fuera de Render, respeta HOST; si falta, producción usa `0.0.0.0` y desarrollo usa `127.0.0.1`. Un PORT inválido detiene el arranque con un mensaje claro.
+
+En Render configura `HOST=0.0.0.0`, `NODE_ENV=production`, `MONGODB_URI` y `CLIENT_ORIGIN` con tu URL de Netlify. Para el primer administrador configura también `SETUP_TOKEN` con al menos 32 caracteres aleatorios. Conserva el PORT que proporcione Render.
+
+Ejecutando desde la carpeta que contiene el package.json principal: instalación `npm ci --omit=dev` y arranque `npm start`. Mantén disponibles `server` y `shared` en el repositorio. El endpoint de salud existente es `/api/health`.
 
 ## Cambios de esta versión
 

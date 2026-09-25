@@ -1,3 +1,7 @@
+# Corrección 1.3.1
+
+Comprobación de sintaxis y prueba del resolvedor de host/puerto: Render fuerza 0.0.0.0, respeta PORT y conserva el modo local. Prueba HTTP real sin MongoDB: escucha en todas las interfaces y responde a una petición local. No se ha desplegado en Render ni probado MongoDB en esta corrección.
+
 # Verificación de la versión 1.3
 
 ## Comprobado en esta entrega

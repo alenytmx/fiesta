@@ -5,6 +5,7 @@ import { randomBytes } from "node:crypto";
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { spawn } from "node:child_process";
 import { createServer } from "node:http";
+import { listenAddress } from "./listen-address.js";
 import { createRealtime } from "./realtime.js";
 import { quoteStatus } from "../shared/finance.js";
 import { createApp } from "./app.js";
@@ -21,6 +22,7 @@ import {
   Branding,
 } from "./models.js";
 try {
+  const { port, host } = listenAddress();
   if (!process.env.MONGODB_URI)
     throw new Error("Configura MONGODB_URI en server/.env.");
   await mongoose.connect(process.env.MONGODB_URI, {
@@ -102,18 +104,18 @@ try {
   });
   const server = createServer(app);
   realtime = createRealtime(server);
-  const port = Number(process.env.PORT || 4000);
-  const host = process.env.HOST || "127.0.0.1";
   server.listen(port, host, () => {
     const url =
       `http://localhost:${port}` +
       (first ? "#setup=" + encodeURIComponent(setupToken) : "");
     console.log(
-      `Fiesta listo en http://localhost:${port}. Mantén esta ventana abierta.`,
+      `Fiesta escuchando en ${host}:${port}.`,
     );
     if (first)
       console.log(
-        "Crea el administrador desde la pantalla inicial. La clave local está en server/.setup-key.",
+        process.env.SETUP_TOKEN
+          ? "Crea el administrador desde la pantalla inicial usando la clave configurada en SETUP_TOKEN."
+          : "Crea el administrador desde la pantalla inicial. La clave local está en server/.setup-key.",
       );
     if (process.env.OPEN_BROWSER === "1" && process.platform === "win32")
       spawn("cmd.exe", ["/c", "start", "", url], { stdio: "ignore" });
